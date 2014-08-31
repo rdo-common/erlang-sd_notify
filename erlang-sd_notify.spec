@@ -9,7 +9,7 @@
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 Group:		Development/Languages
 License:	MIT
@@ -59,6 +59,9 @@ install -m 755 -p priv/%{realname}_drv.so $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%
 
 
 %changelog
+* Thu Aug 28 2014 Peter Lemenkov <lemenkov@gmail.com> - 0.1-3
+- Rebuild with Erlang 17.2.1
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org>
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
