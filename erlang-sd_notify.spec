@@ -9,7 +9,7 @@
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 Group:		Development/Languages
 License:	MIT
@@ -33,7 +33,7 @@ Requires:	erlang-stdlib%{?_isa}
 
 
 %build
-CFLAGS="%{optflags}" REBAR_FLAGS="--verbose 2" make %{?_smp_mflags}
+CFLAGS="%{optflags}" LDFLAGS=-lsystemd REBAR_FLAGS="--verbose 2" make %{?_smp_mflags}
 
 
 %install
@@ -59,6 +59,9 @@ install -m 755 -p priv/%{realname}_drv.so $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%
 
 
 %changelog
+* Thu Oct  2 2014 John Eckersberg <eck@redhat.com> - 0.1-4
+- Explicitly link shared library with libsystemd (#1148604)
+
 * Thu Aug 28 2014 Peter Lemenkov <lemenkov@gmail.com> - 0.1-3
 - Rebuild with Erlang 17.2.1
 
