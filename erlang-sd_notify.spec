@@ -9,7 +9,7 @@
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 Group:		Development/Languages
 License:	MIT
@@ -59,6 +59,9 @@ install -m 755 -p priv/%{realname}_drv.so $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%
 
 
 %changelog
+* Tue Nov 04 2014 Peter Lemenkov <lemenkov@gmail.com> - 0.1-5
+- Rebuild with Erlang 17.3.3
+
 * Thu Oct  2 2014 John Eckersberg <eck@redhat.com> - 0.1-4
 - Explicitly link shared library with libsystemd (#1148604)
 
