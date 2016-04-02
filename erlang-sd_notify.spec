@@ -1,26 +1,25 @@
 %global realname sd_notify
+%global upstream lemenkov
 %{?filter_setup:
 %filter_provides_in %{_libdir}/erlang/lib/.*\.so$
 %filter_setup
 }
-%{expand: %(NIF_VER=`rpm -q erlang-erts --provides | grep --color=no erl_nif_version` ; if [ "$NIF_VER" != "" ]; then echo %%global __erlang_nif_version $NIF_VER ; fi)}
-%{expand: %(DRV_VER=`rpm -q erlang-erts --provides | grep --color=no erl_drv_version` ; if [ "$DRV_VER" != "" ]; then echo %%global __erlang_drv_version $DRV_VER ; fi)}
 
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 Group:		Development/Languages
 License:	MIT
-URL:		https://github.com/lemenkov/erlang-sd_notify
-VCS:		scm:git:https://github.com/lemenkov/erlang-sd_notify.git
-Source0:	https://github.com/lemenkov/erlang-sd_notify/archive/%{version}/erlang-%{realname}-%{version}.tar.gz
+URL:		https://github.com/%{upstream}/erlang-%{realname}
+%if 0%{?el7}%{?fedora}
+VCS:		scm:git:https://github.com/%{upstream}/erlang-%{realname}.git
+%endif
+Source0:	https://github.com/%{upstream}/erlang-%{realname}/archive/%{version}/erlang-%{realname}-%{version}.tar.gz
+Source1:	erlang-sd_notify-rebar.config
 BuildRequires:	erlang-rebar
 BuildRequires:	systemd-devel
-Requires:	erlang-erts%{?_isa}
-Requires:	erlang-kernel%{?_isa}
-Requires:	erlang-stdlib%{?_isa}
 %{?__erlang_nif_version:Requires: %{__erlang_nif_version}}
 
 
@@ -30,35 +29,31 @@ Requires:	erlang-stdlib%{?_isa}
 
 %prep
 %setup -q
+cp %{SOURCE1} rebar.config
 
 
 %build
-CFLAGS="%{optflags}" LDFLAGS=-lsystemd REBAR_FLAGS="--verbose 2" make %{?_smp_mflags}
+%{erlang_compile}
 
 
 %install
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/{ebin,priv}
-install -m 644 -p ebin/%{realname}.app $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/ebin
-install -m 644 -p ebin/%{realname}.beam $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/ebin
-install -m 755 -p priv/%{realname}_drv.so $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/priv
+%{erlang_install}
 
 
 %check
 # Empty for now
-#rebar eunit -v
+%{erlang_test}
 
 
 %files
-%doc LICENSE
-%dir %{_libdir}/erlang/lib/%{realname}-%{version}/
-%dir %{_libdir}/erlang/lib/%{realname}-%{version}/ebin/
-%dir %{_libdir}/erlang/lib/%{realname}-%{version}/priv/
-%{_libdir}/erlang/lib/%{realname}-%{version}/ebin/%{realname}.app
-%{_libdir}/erlang/lib/%{realname}-%{version}/ebin/%{realname}.beam
-%{_libdir}/erlang/lib/%{realname}-%{version}/priv/%{realname}_drv.so
+%license LICENSE
+%{erlang_appdir}/
 
 
 %changelog
+* Wed Mar 30 2016 Peter Lemenkov <lemenkov@gmail.com> - 0.1-9
+- Rebuild with Erlang 18.3
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
