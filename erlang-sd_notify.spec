@@ -1,14 +1,10 @@
 %global realname sd_notify
 %global upstream lemenkov
-%{?filter_setup:
-%filter_provides_in %{_libdir}/erlang/lib/.*\.so$
-%filter_setup
-}
 
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 Group:		Development/Languages
 License:	MIT
@@ -51,6 +47,9 @@ cp %{SOURCE1} rebar.config
 
 
 %changelog
+* Fri Apr 15 2016 Peter Lemenkov <lemenkov@gmail.com> - 0.1-10
+- Drop unneeded macro
+
 * Wed Mar 30 2016 Peter Lemenkov <lemenkov@gmail.com> - 0.1-9
 - Rebuild with Erlang 18.3
 
