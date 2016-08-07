@@ -4,14 +4,11 @@
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	10%{?dist}
+Release:	11%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
-Group:		Development/Languages
 License:	MIT
 URL:		https://github.com/%{upstream}/erlang-%{realname}
-%if 0%{?el7}%{?fedora}
 VCS:		scm:git:https://github.com/%{upstream}/erlang-%{realname}.git
-%endif
 Source0:	https://github.com/%{upstream}/erlang-%{realname}/archive/%{version}/erlang-%{realname}-%{version}.tar.gz
 Source1:	erlang-sd_notify-rebar.config
 BuildRequires:	erlang-rebar
@@ -25,7 +22,7 @@ BuildRequires:	systemd-devel
 
 %prep
 %setup -q
-cp %{SOURCE1} rebar.config
+cp -p %{SOURCE1} rebar.config
 
 
 %build
@@ -47,6 +44,9 @@ cp %{SOURCE1} rebar.config
 
 
 %changelog
+* Sun Aug 07 2016 Igor Gnatenko <ignatenko@redhat.com> - 0.1-11
+- Rebuild
+
 * Fri Apr 15 2016 Peter Lemenkov <lemenkov@gmail.com> - 0.1-10
 - Drop unneeded macro
 
