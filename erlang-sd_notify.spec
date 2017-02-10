@@ -4,7 +4,7 @@
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	11%{?dist}
+Release:	12%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 License:	MIT
 URL:		https://github.com/%{upstream}/erlang-%{realname}
@@ -44,6 +44,9 @@ cp -p %{SOURCE1} rebar.config
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Sun Aug 07 2016 Igor Gnatenko <ignatenko@redhat.com> - 0.1-11
 - Rebuild
 
