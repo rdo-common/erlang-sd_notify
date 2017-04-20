@@ -1,15 +1,15 @@
 %global realname sd_notify
-%global upstream lemenkov
+%global upstream systemd
 
 
 Name:		erlang-%{realname}
-Version:	0.1
-Release:	12%{?dist}
+Version:	1.0
+Release:	1%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 License:	MIT
 URL:		https://github.com/%{upstream}/erlang-%{realname}
 VCS:		scm:git:https://github.com/%{upstream}/erlang-%{realname}.git
-Source0:	https://github.com/%{upstream}/erlang-%{realname}/archive/%{version}/erlang-%{realname}-%{version}.tar.gz
+Source0:	https://github.com/%{upstream}/erlang-%{realname}/archive/v%{version}/erlang-%{realname}-%{version}.tar.gz
 Source1:	erlang-sd_notify-rebar.config
 BuildRequires:	erlang-rebar
 BuildRequires:	systemd-devel
@@ -34,7 +34,6 @@ cp -p %{SOURCE1} rebar.config
 
 
 %check
-# Empty for now
 %{erlang_test}
 
 
@@ -44,6 +43,9 @@ cp -p %{SOURCE1} rebar.config
 
 
 %changelog
+* Thu Apr 20 2017 Peter Lemenkov <lemenkov@gmail.com> - 1.0-1
+- Ver. 1.0 (backwards API/ABI compatible)
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
