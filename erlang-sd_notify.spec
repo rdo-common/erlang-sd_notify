@@ -4,13 +4,12 @@
 
 Name:		erlang-%{realname}
 Version:	1.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 License:	MIT
 URL:		https://github.com/%{upstream}/erlang-%{realname}
 VCS:		scm:git:https://github.com/%{upstream}/erlang-%{realname}.git
 Source0:	https://github.com/%{upstream}/erlang-%{realname}/archive/v%{version}/erlang-%{realname}-%{version}.tar.gz
-Source1:	erlang-sd_notify-rebar.config
 BuildRequires:	erlang-rebar
 BuildRequires:	systemd-devel
 %{?__erlang_nif_version:Requires: %{__erlang_nif_version}}
@@ -22,7 +21,6 @@ BuildRequires:	systemd-devel
 
 %prep
 %setup -q
-cp -p %{SOURCE1} rebar.config
 
 
 %build
@@ -43,6 +41,9 @@ cp -p %{SOURCE1} rebar.config
 
 
 %changelog
+* Thu Apr 2017 Peter Lemenkov <lemenkov@gmail.com> - 1.0-2
+- Remove out-of-tree makefile (upstreamed)
+
 * Thu Apr 20 2017 Peter Lemenkov <lemenkov@gmail.com> - 1.0-1
 - Ver. 1.0 (backwards API/ABI compatible)
 
