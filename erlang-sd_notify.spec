@@ -41,7 +41,7 @@ BuildRequires:	systemd-devel
 
 
 %changelog
-* Thu Apr 2017 Peter Lemenkov <lemenkov@gmail.com> - 1.0-2
+* Thu Apr 20 2017 Peter Lemenkov <lemenkov@gmail.com> - 1.0-2
 - Remove out-of-tree makefile (upstreamed)
 
 * Thu Apr 20 2017 Peter Lemenkov <lemenkov@gmail.com> - 1.0-1
