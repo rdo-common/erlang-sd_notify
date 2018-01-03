@@ -10,7 +10,7 @@
 
 Name:		erlang-%{realname}
 Version:	0.1
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:	Erlang interface to systemd notify subsystem
 Group:		Development/Languages
 License:	MIT
@@ -78,6 +78,9 @@ install -m 755 -p priv/%{realname}_drv.so $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%
 
 
 %changelog
+* Tue Dec 19 2017 Tony Breeds <tony@bakeyournoodle.com> - 0.1-10
+- Rebuild to get consistent erlang(erl_nif_version) on all architectures
+
 * Wed Apr 13 2016 Peter Lemenkov <lemenkov@gmail.com> - 0.1-9
 - Re-enable building w/o rebar.
 
