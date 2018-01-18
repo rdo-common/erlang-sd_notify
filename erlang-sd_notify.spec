@@ -1,5 +1,8 @@
 %global realname sd_notify
 %global upstream systemd
+%global have_rebar 0
+%{expand: %(NIF_VER=`rpm -q erlang-erts --provides | grep --color=no erl_nif_version` ; if [ "$NIF_VER" != "" ]; then echo %%global __erlang_nif_version $NIF_VER ; fi)}
+%{expand: %(DRV_VER=`rpm -q erlang-erts --provides | grep --color=no erl_drv_version` ; if [ "$DRV_VER" != "" ]; then echo %%global __erlang_drv_version $DRV_VER ; fi)}
 
 
 Name:		erlang-%{realname}
@@ -10,8 +13,16 @@ License:	MIT
 URL:		https://github.com/%{upstream}/erlang-%{realname}
 VCS:		scm:git:https://github.com/%{upstream}/erlang-%{realname}.git
 Source0:	https://github.com/%{upstream}/erlang-%{realname}/archive/v%{version}/erlang-%{realname}-%{version}.tar.gz
+%if %{have_rebar}
 BuildRequires:	erlang-rebar
+%else
+BuildRequires:  erlang-compiler
+BuildRequires:  erlang-erl_interface
+%endif %{have_rebar}
 BuildRequires:	systemd-devel
+Requires:	erlang-erts%{?_isa}
+Requires:	erlang-kernel%{?_isa}
+Requires:	erlang-stdlib%{?_isa}
 %{?__erlang_nif_version:Requires: %{__erlang_nif_version}}
 
 
@@ -24,20 +35,39 @@ BuildRequires:	systemd-devel
 
 
 %build
-%{erlang_compile}
+%if %{have_rebar}
+CFLAGS="%{optflags}" LDFLAGS=-lsystemd REBAR_FLAGS="--verbose 2" make %{?_smp_mflags}
+%else
+mkdir ebin priv
+export CFLAGS="%{optflags}"
+%{__cc} -c $CFLAGS -g -Wall -fPIC  -I %{_libdir}/erlang/lib/erl_interface-*/include -I %{_libdir}/erlang/erts-*/include   c_src/sd_notify.c -o c_src/sd_notify.o
+%{__cc} c_src/sd_notify.o $LDFLAGS -shared  -L %{_libdir}/erlang/lib/erl_interface-*/lib -lerl_interface -lei -lsystemd -o priv/sd_notify_drv.so
+erlc -o ebin/ src/sd_notify.erl
+%endif %{have_rebar}
 
 
 %install
-%{erlang_install}
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/{ebin,priv}
+%if %{have_rebar}
+install -m 644 -p ebin/%{realname}.app $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/ebin
+%else
+install -m 644 -p %{S:1} $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/ebin
+%endif %{have_rebar}
+install -m 644 -p ebin/%{realname}.beam $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/ebin
+install -m 755 -p priv/%{realname}_drv.so $RPM_BUILD_ROOT%{_libdir}/erlang/lib/%{realname}-%{version}/priv
 
 
 %check
-%{erlang_test}
 
 
 %files
 %license LICENSE
-%{erlang_appdir}/
+%dir %{_libdir}/erlang/lib/%{realname}-%{version}/
+%dir %{_libdir}/erlang/lib/%{realname}-%{version}/ebin/
+%dir %{_libdir}/erlang/lib/%{realname}-%{version}/priv/
+%{_libdir}/erlang/lib/%{realname}-%{version}/ebin/%{realname}.app
+%{_libdir}/erlang/lib/%{realname}-%{version}/ebin/%{realname}.beam
+%{_libdir}/erlang/lib/%{realname}-%{version}/priv/%{realname}_drv.so
 
 
 %changelog
